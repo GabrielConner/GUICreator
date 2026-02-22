@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="GUICreator.vcxproj" Id="fbb7e0cb-6f30-4b8c-a616-96f5074178b4" />
+</Solution>
