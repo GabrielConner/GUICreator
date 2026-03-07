@@ -9,8 +9,7 @@
 2. glad
 3. glfw
 4. glm
-5. libxml
-6. stb\_image with implementation file
+5. stb\_image with implementation file
 
 
 ### Personal Packages :
