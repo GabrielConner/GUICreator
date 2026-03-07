@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<body primaryColor="0.2,0.3,0.3,1.0" scrollStep="0.05" maxScroll="0">
-  <elem id="text" primaryColor="0,1,0,1" secondaryColor="1,0,0,1" inputField="true" placeholder="input..." scrollStep="0.05" maxScroll="0.30" border="true" borderThickness="0.01"
-  gradientX="true" gradientY="true" gradientStart="1,1" manhattanGradient="true" gradientDistance="2" gradientStep="0.1">
-  </elem>
-</body>

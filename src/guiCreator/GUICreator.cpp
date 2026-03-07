@@ -236,7 +236,7 @@ void Update() {
 
 
 
-    GUIBase* elem = selectedPage->TriggerTree(mousePos, button.pressed, yScroll);
+    GUIBase* elem = selectedPage->TriggerTree(mousePos, button.pressed, yScroll, false);
     if (elem != nullptr) {
       if (button.pressed) {
         clicked = elem;
@@ -488,12 +488,20 @@ bool GUIBase::TreeEnabled() {
 
 
 
-GUIBase* GUIBase::TriggerTree(Vector2 mousePos, bool click, float& yScroll) {
-  GUIBase* elemClicked = nullptr;
-  for (int i = 0; i < children.size(); i++) {
-    GUIElement* child = children[i];
+GUIBase* GUIBase::TriggerTree(Vector2 mousePos, bool click, float& yScroll, bool noGrid) {
+  if (!enabled) {
+    return nullptr;
+  }
 
-    elemClicked = child->TriggerTree(mousePos, click, yScroll);
+  GUIBase* elemClicked = nullptr;
+  for (int i = children.size() - 1; i >= 0; i--) {
+    GUIElement* child = children[i];
+    if (noGrid && !child->noGrid) {
+      continue;
+    }
+
+
+    elemClicked = child->TriggerTree(mousePos, click, yScroll, noGrid);
     if (elemClicked != nullptr) {
 
       if (scrollStep != 0 && yScroll != 0) {
@@ -648,13 +656,19 @@ GUIBody::GUIBody() : GUIBase() {}
 // GUIElement
 //------------------------------------------------------------------------------------------
 
-GUIBase* GUIElement::TriggerTree(Vector2 mousePos, bool click, float& yScroll) {
-  if (LazyPositionInElement(mousePos, this)) {
-    GUIBase* desc = GUIBase::TriggerTree(mousePos, click, yScroll);
-    if (desc != nullptr) {
-      return desc;
-    }
+GUIBase* GUIElement::TriggerTree(Vector2 mousePos, bool click, float& yScroll, bool noGrid) {
+  if (!enabled) {
+    return nullptr;
+  }
 
+  bool inSelf = LazyPositionInElement(mousePos, this);
+
+  GUIBase* desc = GUIBase::TriggerTree(mousePos, click, yScroll, !inSelf);
+  if (desc != nullptr) {
+    return desc;
+  }
+
+  if (inSelf) {
     if (!_isHovered) {
       if (onEnter != nullptr) {
         onEnter(this);
@@ -669,7 +683,7 @@ GUIBase* GUIElement::TriggerTree(Vector2 mousePos, bool click, float& yScroll) {
       if (inputField) {
         SetTextInputElement(this);
       }
-      
+
       if (onClick != nullptr) {
         onClick(this);
       }
@@ -682,7 +696,6 @@ GUIBase* GUIElement::TriggerTree(Vector2 mousePos, bool click, float& yScroll) {
 
     return this;
   }
-
   return nullptr;
 }
 
@@ -796,8 +809,8 @@ void GUIElement::CopyViewAttributes(GUIBase* obj) {
 
 
 
-GUIElement::GUIElement() : GUIBase(), pageCreated(false), id(), placeholder(), transform(), drawTransform(), stretch(true), stick(false), stuck(false), inputField(false),
-toggleDeletion(false), _transform(), _stretch(true), insertCharPos(-1,-1,0),
+GUIElement::GUIElement() : GUIBase(), pageCreated(false), id(), placeholder(), transform(), drawTransform(), stretch(true), stick(false),
+stuck(false), inputField(false), noGrid(false), toggleDeletion(false), _transform(), _stretch(true), insertCharPos(-1, -1, 0),
 _stick(false), _stuck(false)
 {}
 

@@ -175,7 +175,7 @@ public:
 
 
   DLL bool TreeEnabled();
-  DLL virtual GUIBase* TriggerTree(vector::Vector2 mousePos, bool click, float& yScroll);
+  DLL virtual GUIBase* TriggerTree(vector::Vector2 mousePos, bool click, float& yScroll, bool noGrid);
 
 
   DLL virtual void Reset();
@@ -238,6 +238,8 @@ public:
 
   bool inputField;
 
+  bool noGrid;
+
   Transform transform;
   Transform drawTransform;
 
@@ -246,7 +248,7 @@ public:
   std::string id;
   std::string placeholder;
 
-  DLL GUIBase* TriggerTree(vector::Vector2 mousePos, bool click, float& yScroll) override;
+  DLL GUIBase* TriggerTree(vector::Vector2 mousePos, bool click, float& yScroll, bool noGrid) override;
 
 
   DLL void Reset() override;

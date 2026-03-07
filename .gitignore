@@ -1,9 +1,15 @@
-srcExt/
-library/freetype
-library/glfw
-library/libxml
+*.xml
 
-libxml2.dll
+srcExt/
+library/
+fonts/
+
+*.dll
+*.sln[x]
+*.vcxproj
+*.filters
+
+
 
 
 ## Ignore Visual Studio temporary files, build results, and

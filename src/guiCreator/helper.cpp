@@ -286,6 +286,8 @@ void HandleElementAttributes(std::string pageName, GUIElement* element, int attr
       element->stuck = ToBool(value);
     } else if (strcmp(key, "inputField") == 0) {
       element->inputField = ToBool(value);
+    } else if (strcmp(key, "noGrid") == 0) {
+      element->noGrid = ToBool(value);
     } else if (strcmp(key, "enabled") == 0) {
       element->enabled = ToBool(value);
     } else if (strcmp(key, "onClick") == 0) {

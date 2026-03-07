@@ -24,7 +24,15 @@ void Delete(GUIBase* elem) {
 
 int main() {
 
+  StartAppInfo info = StartAppInfo();
+
+  Start(info);
+
+
   SetCyclicFunction("global", "cycle", cycle);
+
+  SetPage("home", "home.xml");
+  OpenPage("home");
 
   SetPage("home", "home.xml");
   OpenPage("home");
@@ -36,9 +44,6 @@ int main() {
   elem->onClick = Delete;
 
 
-  StartAppInfo info = StartAppInfo();
-
-  Start(info);
 
   Update();
 
