@@ -4,7 +4,7 @@
 #include "private/types.h"
 
 #include "pPack/GUICreator.h"
-#include "pPack/GUIReader.h"
+#include "private/GUIReader.h"
 #include "pPack/windowManager.h"
 
 #include "stb_image.h"
@@ -323,18 +323,18 @@ bool PrecompileData(std::string fileName, void** ppBuffer, size_t* bufferSize) {
     return false;
   }
 
-  size_t* gui = (size_t*)guiReader_GenerateGUIFromFile(fileName.c_str());
+  size_t* gui = (size_t*)GenerateGUIFromFile(fileName.c_str());
 
   *bufferSize = *gui;
 
   if (*bufferSize == 0) {
-    guiReader_FreeGUI(gui);
+    FreeGUI(gui);
     return false;
   }
 
   *ppBuffer = malloc(*bufferSize);
   memcpy(*ppBuffer, gui + 1, *bufferSize);
-  guiReader_FreeGUI(gui);
+  FreeGUI(gui);
 
   return true;
 }

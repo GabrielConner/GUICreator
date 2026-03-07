@@ -7,7 +7,7 @@
 #include "pPack/textRendering.h"
 #include "pPack/timer.h"
 #include "pPack/animateValue.h"
-#include "pPack/GUIReader.h"
+#include "private/GUIReader.h"
 
 #include "private/helper.h"
 #include "private/casting.h"
