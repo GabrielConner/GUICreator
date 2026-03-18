@@ -23,7 +23,7 @@ namespace {
 
 GUIElement* readElement = nullptr;
 
-
+std::string globalPath;
 
 }; // namespace
 
@@ -245,12 +245,14 @@ void HandleGeneralAttributes(GUIBase* obj, int attributeCount, StringHandler& ha
     } else if (strcmp(key, "maxScroll") == 0) {
       obj->maxScroll = atof(value);
     } else if (strcmp(key, "image") == 0) {
-      if (!FileExists(value)) {
+
+      std::string path = globalPath + value;
+      if (!FileExists(path.c_str())) {
         continue;
       }
 
       int width, height, channels, rChannels = 4;
-      void* pixelData = stbi_load(value, &width, &height, &channels, rChannels);
+      void* pixelData = stbi_load(path.c_str(), &width, &height, &channels, rChannels);
 
       glGenTextures(1, &obj->texture);
       glBindTexture(GL_TEXTURE_2D, obj->texture);
@@ -339,5 +341,23 @@ bool PrecompileData(std::string fileName, void** ppBuffer, size_t* bufferSize) {
   return true;
 }
 
+
+
+void SetGlobalPath(std::string path) {
+  globalPath = path;
+}
+
 }; // namespace gui_creator_private
+
+
+
+
+namespace gui_creator {
+
+const std::string& GetGlobalPath() {
+  return globalPath;
+}
+
+}; // namespace gui_creator
+
 }; // namespace pPack

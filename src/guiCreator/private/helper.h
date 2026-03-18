@@ -25,6 +25,8 @@ void HandleGeneralAttributes(gui_creator::GUIBase* body, int attributeCount, gui
 void HandleElementAttributes(std::string pageName, gui_creator::GUIElement* element, int attributeCount, gui_creator_private::StringHandler& handler);
 std::string TryGetStringFrom(char const* const str);
 
+
+void SetGlobalPath(std::string path);
 }; // namespace gui_creator_private
 }; // namespace pPack
 

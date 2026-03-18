@@ -31,10 +31,10 @@ int main() {
 
   SetCyclicFunction("global", "cycle", cycle);
 
-  SetPage("home", "home.xml");
+  SetPage("home", GetGlobalPath() + "home.xml");
   OpenPage("home");
 
-  SetPage("home", "home.xml");
+  SetPage("home", GetGlobalPath() + "home.xml");
   OpenPage("home");
 
 

@@ -1,4 +1,5 @@
 #define GLFW_INCLUDE_NONE
+#define WIN32_LEAN_AND_MEAN
 
 #include "pPack/vector.h"
 #include "pPack/GUICreator.h"
@@ -20,6 +21,7 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
+#include <filesystem>
 
 #include <Windows.h>
 
@@ -95,6 +97,13 @@ namespace gui_creator {
 
 
 bool Start(StartAppInfo info) {
+  CHAR pathBuffer[512];
+  GetModuleFileNameA(NULL, pathBuffer, 512 / sizeof(TCHAR));
+  std::filesystem::path pathProp = std::string(pathBuffer);
+  std::string path = (pathProp.parent_path().concat("\\")).lexically_normal().string();
+  SetGlobalPath(path);
+
+
   if (!glfwInit()) {
     return false;
   }
@@ -112,9 +121,10 @@ bool Start(StartAppInfo info) {
   window.SetSwapInterval(0);
 
 
+  std::string fontLoc = path + info.font;
 
-  text_rendering::Start();
-  bitmap = text_rendering::GenerateBitmap(info.font.c_str(), info.fontSize, info.fontLow, info.fontHigh, info.fontFiltering);
+  text_rendering::Start(path);
+  bitmap = text_rendering::GenerateBitmap(fontLoc.c_str(), info.fontSize, info.fontLow, info.fontHigh, info.fontFiltering);
 
 
   glEnable(GL_BLEND);
@@ -125,14 +135,16 @@ bool Start(StartAppInfo info) {
   //singletonTimer->SetUpdateDelay(1.0 / 120.0);
 
 
+  std::string vertLoc = path + "./shaders/guiCreator/shader.vert";
+  std::string fragLoc = path + "./shaders/guiCreator/shader.frag";
+  std::string borderFragLoc = path + "./shaders/guiCreator/border.frag";
 
-  const char* vertLocs[] = { "./shaders/guiCreator/shader.vert" };
-  const char* fragLocs[] = { "./shaders/guiCreator/shader.frag" };
+  const char* vertLocC = vertLoc.c_str();
+  const char* fragLocC = fragLoc.c_str();
+  const char* borderFragLocC = borderFragLoc.c_str();
 
-  const char* borderFragLocs[] = { "./shaders/guiCreator/border.frag" };
-
-  ShaderCreateInfo shaderInfo[] = { ShaderCreateInfo(vertLocs, 1, GL_VERTEX_SHADER), ShaderCreateInfo(fragLocs, 1, GL_FRAGMENT_SHADER) };
-  ShaderCreateInfo borderShaderInfo[] = { ShaderCreateInfo(vertLocs, 1, GL_VERTEX_SHADER), ShaderCreateInfo(borderFragLocs, 1, GL_FRAGMENT_SHADER) };
+  ShaderCreateInfo shaderInfo[] = { ShaderCreateInfo(&vertLocC, 1, GL_VERTEX_SHADER), ShaderCreateInfo(&fragLocC, 1, GL_FRAGMENT_SHADER)};
+  ShaderCreateInfo borderShaderInfo[] = { ShaderCreateInfo(&vertLocC, 1, GL_VERTEX_SHADER), ShaderCreateInfo(&borderFragLocC, 1, GL_FRAGMENT_SHADER) };
 
   shader = ShaderHandler::CreateShader("GUICreator__baseShader", shaderInfo, 2);
   borderShader = ShaderHandler::CreateShader("GUICreator__borderShader", borderShaderInfo, 2);
@@ -798,7 +810,6 @@ void GUIElement::CopyViewAttributes(GUIBase* obj) {
   gradientY = obj->gradientY;
   manhattanGradient = obj->manhattanGradient;
   borderEnable = obj->borderEnable;
-  enabled = obj->enabled;
   centerTextX = obj->centerTextX;
   centerTextY = obj->centerTextY;
   textSize = obj->textSize;

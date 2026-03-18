@@ -3,22 +3,22 @@
 
 
 layout(std140, binding=0) uniform GUIElementInformation {
-		vec4 primaryColor;
-		vec4 secondaryColor;
-		vec2 gradientStart;
+  vec4 primaryColor;
+  vec4 secondaryColor;
+  vec2 gradientStart;
 
   float gradientStep;
-		float gradientDistance;
+  float gradientDistance;
 
-		bool gradientX;
-		bool gradientY;
-		bool manhattan;
+  bool gradientX;
+  bool gradientY;
+  bool manhattan;
 };
 
 layout(std140, binding=1) uniform TransformInfo {
-		vec2 position;
-		vec2 scale;
-		vec2 sizeFix;
+  vec2 position;
+  vec2 scale;
+  vec2 sizeFix;
 };
 
 out vec4 fragColor;
@@ -33,37 +33,37 @@ uniform vec4 area;
 
 
 bool clipPos() {
-	return fragPos.x < area.x || fragPos.y < area.y || fragPos.x > area.z || fragPos.y > area.w;
+  return fragPos.x < area.x || fragPos.y < area.y || fragPos.x > area.z || fragPos.y > area.w;
 }
 
 
 
 void main() {
-		if (clipPos()) {
-				fragColor = vec4(0.f);
-		} else	if (useTexture == true) {
-				fragColor = texture(texTarget, fragUV);
-		} else {
-				float mixAmount = 0.f;
-				vec2 distTo = boxPos;
+  if (clipPos()) {
+    fragColor = vec4(0.f);
+  } else	if (useTexture == true) {
+    fragColor = texture(texTarget, fragUV);
+  } else {
+    float mixAmount = 0.f;
+    vec2 distTo = boxPos;
 
-				if (gradientX) {
-						distTo.x = gradientStart.x;
-				}
-				if (gradientY) {
-						distTo.y = gradientStart.y;
-				}
-				if (manhattan)
-						mixAmount = abs(distTo.x - boxPos.x) + abs(distTo.y - boxPos.y);
-				else
-						mixAmount = distance(boxPos, distTo);
+    if (gradientX) {
+      distTo.x = gradientStart.x;
+    }
+    if (gradientY) {
+      distTo.y = gradientStart.y;
+    }
+    if (manhattan)
+      mixAmount = abs(distTo.x - boxPos.x) + abs(distTo.y - boxPos.y);
+    else
+      mixAmount = distance(boxPos, distTo);
 
-				if (gradientStep > 0) {
-						mixAmount = gradientStep * floor(mixAmount / gradientStep);
-				}
+    if (gradientStep > 0) {     
+      mixAmount = gradientStep * floor(mixAmount / gradientStep);
+    }
 
-				mixAmount /= gradientDistance;
+    mixAmount /= gradientDistance;
 
-				fragColor = mix(primaryColor, secondaryColor, clamp(mixAmount, 0.0f, 1.0f));
-		}
+    fragColor = mix(primaryColor, secondaryColor, clamp(mixAmount, 0.0f, 1.0f));
+  }
 }

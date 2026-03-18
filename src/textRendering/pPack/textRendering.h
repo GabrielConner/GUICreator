@@ -96,7 +96,7 @@ public:
 
 
 
-DLL void Start();
+DLL void Start(std::string folderLoc);
 DLL void End();
 
 

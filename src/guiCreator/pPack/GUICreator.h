@@ -331,6 +331,9 @@ DLL GUIBase* GetObjectByID(std::string id);
 
 DLL bool LazyPositionInElement(vector::Vector2 pos, GUIElement* ele);
 
+
+DLL const std::string& GetGlobalPath();
+
 // --------------------------------------------------
 // --------------------------------------------------
 // Functions

@@ -60,8 +60,8 @@ CharacterVertex* AddBarAt(CharacterVertex* vertices, IVector2 pos, RenderTextInf
 const char signature[8] = {'B', 'I', 'T', 'M', 'A', 'P', 'T', 'R'};
 
 
-const char* vertLocs[] = {"./shaders/textRendering/textRendering.vert"};
-const char* fragLocs[] = {"./shaders/textRendering/textRendering.frag"};
+std::string vertLocs = "/shaders/textRendering/textRendering.vert";
+std::string fragLocs = "/shaders/textRendering/textRendering.frag";
 
 
 FT_Library library;
@@ -413,7 +413,7 @@ Bitmap::Bitmap() : texture(0), textureSize(0), fontSize(0), charLow(0), charHigh
 
 
 
-void Start() {
+void Start(std::string folderLoc) {
 
   // Start freetype
   err = FT_Init_FreeType(&library);
@@ -424,7 +424,13 @@ void Start() {
 
 
   // Create shader
-  ShaderCreateInfo infos[] = {ShaderCreateInfo(vertLocs, 1, GL_VERTEX_SHADER), ShaderCreateInfo(fragLocs, 1, GL_FRAGMENT_SHADER)};
+  vertLocs = folderLoc + vertLocs;
+  fragLocs = folderLoc + fragLocs;
+
+  const char* vertC = vertLocs.c_str();
+  const char* fragC = fragLocs.c_str();
+
+  ShaderCreateInfo infos[] = {ShaderCreateInfo(&vertC, 1, GL_VERTEX_SHADER), ShaderCreateInfo(&fragC, 1, GL_FRAGMENT_SHADER)};
   shader = ShaderHandler::CreateShader("textRendering__SHADER", infos, 2);
 
 
